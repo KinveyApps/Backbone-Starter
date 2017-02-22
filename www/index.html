@@ -1,0 +1,256 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Kinvey BackboneJS Starter App</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/todc-bootstrap.min.css">
+    <link rel="stylesheet" href="css/app.css">
+  </head>
+  <body>
+    <!--[if lte IE 9]>
+        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+    <![endif]-->
+
+    <!-- Application container. -->
+    <div id="app"></div>
+
+    <script type="text/template" id="navbar-template">
+      <nav class="navbar navbar-masthead navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Brand</a>
+          </div>
+
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+              <li><a href="/">Books</a></li>
+              <li><a href="/upload">Upload a File</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li class="dropdown">
+                <a id="account-dropdown" href="#" class="dropdown-toggle" data-bypass data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">User <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="/profile">Profile</a></li>
+                  <li role="separator" class="divider"></li>
+                  <li><a href="/logout">Logout</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <div id="content"></div>
+    </script>
+
+    <script type="text/template" id="books-template">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="page-header">
+              <h1>Sample table of Books <small>using a <code>CacheStore</code></small></h1>
+            </div>
+            <div id="books-table">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>ISBN</th>
+                    <th>Review</th>
+                  </tr>
+                </thead>
+                <tbody>
+                <% _.each(books, function(book){ %>
+                  <tr>
+                    <td><%= book.title %></td>
+                    <td><%= book.author %></td>
+                    <td><%= book.isbn %></td>
+                    <td><%= book.review %></td>
+                  </tr>
+                <% }); %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </script>
+
+    <script type="text/template" id="upload-template">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">Upload File</h3>
+              </div>
+              <div class="panel-body">
+                <form id="upload-form">
+                  <div class="form-group">
+                    <label for="filename">File Name</label>
+                    <input type="text" class="form-control" id="filename" placeholder="File Name">
+                  </div>
+                  <div class="form-group">
+                    <label for="file">File input</label>
+                    <input type="file" id="file">
+                  </div>
+                  <button type="submit" class="btn btn-primary">Upload</button>
+                  <p id="upload-success" class="text-success" style="margin-top: 10px; display: none;">File uploaded!</p>
+                  <p id="upload-error" class="text-danger" style="margin-top: 10px; display: none;"></p>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </script>
+
+    <script type="text/template" id="profile-template">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">Profile</h3>
+              </div>
+              <div class="panel-body">
+                <form id="profile-form">
+                  <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" placeholder="Username">
+                  </div>
+                  <div class="form-group">
+                    <label for="firstname">First Name</label>
+                    <input type="text" class="form-control" id="firstname" placeholder="First Name">
+                  </div>
+                  <div class="form-group">
+                    <label for="lastname">Last Name</label>
+                    <input type="text" class="form-control" id="lastname" placeholder="Last Name">
+                  </div>
+                  <button type="submit" class="btn btn-primary">Update</button>
+                  <p id="profile-success" class="text-success" style="margin-top: 10px; display: none;">Profile updated!</p>
+                  <p id="profile-error" class="text-danger" style="margin-top: 10px; display: none;"></p>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </script>
+
+    <script type="text/template" id="login-template">
+      <div class="container login-container">
+        <div class="row">
+          <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">Login</h3>
+              </div>
+              <div class="panel-body">
+                <form id="login-form">
+                  <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" placeholder="Username">
+                  </div>
+                  <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" placeholder="Password">
+                  </div>
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                  <p id="login-error" class="text-danger" style="margin-top: 10px; display: none;"></p>
+                </form>
+              </div>
+              <div class="panel-footer">
+                <div><a href="/signup">Don't have an account? Sign up</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </script>
+
+    <script type="text/template" id="notFound-template">
+      <div class="container login-container">
+        <div class="row">
+          <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-default">
+              <div class="panel-body">
+                <h1>Page Not Found</h1>
+                <p>Sorry, but the page you were trying to view does not exist.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </script>
+
+    <script type="text/template" id="signup-template">
+      <div class="container signup-container">
+        <div class="row">
+          <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">Sign Up</h3>
+              </div>
+              <div class="panel-body">
+                <form id="signup-form">
+                  <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" placeholder="Username">
+                  </div>
+                  <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" placeholder="Password">
+                  </div>
+                  <div class="form-group">
+                    <label for="firstname">First Name</label>
+                    <input type="text" class="form-control" id="firstname" placeholder="First Name">
+                  </div>
+                  <div class="form-group">
+                    <label for="lastname">Last Name</label>
+                    <input type="text" class="form-control" id="lastname" placeholder="Last Name">
+                  </div>
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+              </div>
+              <div class="panel-footer">
+                <div><a href="/login">Already have an account? Login</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </script>
+
+    <!-- Libraries -->
+    <script src="js/underscore.min.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/backbone.min.js"></script>
+    <script src="js/backbone-stickit.min.js"></script>
+    <script src="js/kinvey-backbone-sdk.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+    <!-- App -->
+    <script src="js/views/books.js"></script>
+    <script src="js/views/login.js"></script>
+    <script src="js/views/notFound.js"></script>
+    <script src="js/views/profile.js"></script>
+    <script src="js/views/signup.js"></script>
+    <script src="js/views/upload.js"></script>
+    <script src="js/views/navbar.js"></script>
+    <script src="js/router.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>

@@ -1,5 +1,5 @@
-# HTML5-Starter
-A Kinvey starter application built on the Kinvey HTML5 v3.0 SDK.
+# Backbone-Starter
+A Kinvey starter application that uses the Kinvey BackboneJS v3.0 SDK.
 
 ## Setup
 

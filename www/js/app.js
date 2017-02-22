@@ -1,7 +1,7 @@
 // Initialize Kinvey
 Kinvey.initialize({
-  appKey: 'kid_WJt3WXdOpx',
-  appSecret: '7cfd74e7af364c8f90b116c835f92e7d'
+  appKey: '<appKey>',
+  appSecret: '<appSecret>'
 })
   .then(function(activeUser) {
     // Send all anchor link clicks through Backbone.history.navigate
@@ -22,9 +22,6 @@ Kinvey.initialize({
     // Trigger the initial route and enable HTML5 History API support, set the root
     // folder to '/' by default.
     Backbone.history.start({ pushState: true, root: '/' });
-  })
-  .then(function() {
-    $('#loading-modal').modal('hide');
   })
   .catch(function(error) {
     console.log(error);
